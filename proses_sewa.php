@@ -34,8 +34,11 @@ if(isset($_POST['submit'])) {
         $insert_result = mysqli_query($conn, $insert_query);
 
         if($insert_result) {
-            // Redirect ke halaman transaksi atau halaman lainnya
-            header("Location: transaksi.php");
+            // Ambil id_transaksi yang baru saja dimasukkan
+            $id_transaksi = mysqli_insert_id($conn);
+
+            // Redirect ke halaman transaksi dengan parameter id_transaksi dan id_mobil
+            header("Location: transaksi.php?id_transaksi=$id_transaksi&id_mobil=$id_mobil");
             exit();
         } else {
             echo "Error: " . mysqli_error($conn);

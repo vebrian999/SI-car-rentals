@@ -1,3 +1,51 @@
+<?php
+// Sambungkan ke database
+include 'db_connection.php';
+
+// Pastikan ada parameter yang dikirimkan melalui URL
+if(isset($_GET['id_transaksi']) && isset($_GET['id_mobil'])) {
+    $id_transaksi = $_GET['id_transaksi'];
+    $id_mobil = $_GET['id_mobil'];
+
+    // Query untuk mengambil informasi transaksi berdasarkan id_transaksi dan id_mobil
+    $query = "SELECT * FROM transaksi WHERE id_transaksi = $id_transaksi AND id_mobil = $id_mobil";
+    $result = mysqli_query($conn, $query);
+
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        
+        // Assign nilai-nilai dari database ke variabel untuk kemudian ditampilkan
+        $tanggal_penyewaan = date('d M Y', strtotime($row['tanggal_penyewaan'])); // Format tanggal sesuai kebutuhan Anda
+        $durasi_penyewaan = $row['durasi_penyewaan'] . ' Hari'; // Durasi penyewaan
+        $with_driver = $row['dengan_supir'] ? 'Ya' : 'Tidak'; // Konversi boolean ke string 'Ya' atau 'Tidak'
+        $total_harga = $row['total_harga']; // Total harga dari transaksi
+
+        // Query untuk mengambil informasi mobil berdasarkan id_mobil
+        $query_mobil = "SELECT * FROM mobil WHERE id_mobil = $id_mobil";
+        $result_mobil = mysqli_query($conn, $query_mobil);
+
+        if (mysqli_num_rows($result_mobil) > 0) {
+            $row_mobil = mysqli_fetch_assoc($result_mobil);
+            $nama_mobil = $row_mobil['nama_mobil'];
+            $gambar = $row_mobil['gambar1']; // Menggunakan gambar1 dari database, sesuaikan dengan nama kolom gambar yang sesuai
+
+            // Hitung subtotal berdasarkan harga mobil dan durasi
+            $harga_mobil = $row_mobil['harga_mobil']; // Asumsi harga mobil dari database
+            $subtotal = $harga_mobil * $row['durasi_penyewaan']; // Hitung subtotal berdasarkan harga mobil dan durasi penyewaan
+            $biaya_admin = 5000; // Asumsi biaya admin
+            $biaya_supir = $row['dengan_supir'] ? 400000 : 0; // Biaya supir jika dipilih
+
+            $total_harga = $subtotal + $biaya_admin + $biaya_supir; // Total harga setelah ditambahkan biaya admin dan supir
+        } else {
+            echo "Data mobil tidak ditemukan!";
+        }
+    } else {
+        echo "Data transaksi tidak ditemukan!";
+    }
+} else {
+    echo "Parameter tidak lengkap atau tidak valid!";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -99,10 +147,10 @@
             <article class="bg-white w-full flex flex-col gap-y-5 border border-slate-200 p-5 rounded-md mb-8">
               <h2 class="font-bold text-[20px] md:text-[25px] lg:text-[28px] text-gray-800">Data Diri</h2>
               <div>
-                <label class="block font-semibold text-base text-gray-800 mb-2" for="lama_peminjaman">Lama Peminjaman *</label>
+                <label class="block font-semibold text-base text-gray-800 mb-2" for="lama_peminjaman">Lama Penyewaan *</label>
                 <select name="lama_peminjaman" id="lama_peminjaman" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md">
-                  <option value="1 hari">1 Hari</option>
-                  <option value="6 jam">6 Jam</option>
+                <option value="1 hari" class="text-gray-900 "><?php echo $durasi_penyewaan; ?></option>
+                  <!-- <option value="6 jam">6 Jam</option>
                   <option value="12 jam">12 Jam</option>
                   <option value="2 hari">2 Hari</option>
                   <option value="3 hari">3 Hari</option>
@@ -111,7 +159,7 @@
                   <option value="6 hari">6 Hari</option>
                   <option value="7 hari">7 Hari</option>
                   <option value="14 hari">14 Hari</option>
-                  <option value="30 hari">30 Hari</option>
+                  <option value="30 hari">30 Hari</option> -->
                 </select>
               </div>
               <div>
@@ -212,57 +260,58 @@
             });
           </script>
 
-          <div class="order-1 md:order-2 w-full md:w-[320px] flex-none mb-8 md:mb-0">
-            <div class="bg-white w-full sticky top-[80px] border border-slate-200 p-5 rounded-md shadow-lg">
-              <img class="w-full h-[200px] object-cover rounded-md mb-3" src="./assets/images/images/paket-1.png" height="300" width="300" alt="Aku dengar" />
-              <hr class="border-t border-gray-300 font-semibold" />
-              <div class="my-2">
-                <h1 class="font-light text-xl mb-1 text-gray-900">Merk Mobil</h1>
-                <h2 class="font-bold text-2xl text-gray-900">Vellfire HEV</h2>
-              </div>
-              <hr class="border-t border-gray-300 font-semibold" />
-              <div>
-                <h1 class="font-light mb-1 text-xl text-gray-900">Jenis Mobil</h1>
-                <h2 class="font-bold text-2xl text-gray-900">Manual</h2>
-              </div>
-              <hr class="border-t border-gray-300 font-semibold" />
-              <div class="my-2">
-                <h1 class="font-light mb-1 text-xl text-gray-900">Durasi Sewa</h1>
-                <h2 class="font-bold text-2xl text-gray-900">1 Hari</h2>
-              </div>
-              <hr class="border-t border-gray-300 font-semibold" />
-              <div class="">
-                <div class="mt-4 flex items-center justify-between">
-                  <strong class="font-light text-xl text-slate-700">Subtotal</strong>
-                  <p class="font-semibold text-xl text-gray-900">Rp. 2.000.000</p>
-                </div>
-                <div class="flex items-center justify-between my-1">
-                  <strong class="relative font-light text-xl text-slate-700 group">
+         <div class="order-1 md:order-2 w-full md:w-[320px] flex-none mb-8 md:mb-0">
+    <div class="bg-white w-full sticky top-[80px] border border-slate-200 p-5 rounded-md shadow-lg">
+        <img class="w-full h-[200px] object-cover rounded-md mb-3" src="uploads/<?php echo $gambar; ?>" alt="<?php echo $nama_mobil; ?>" />
+        <hr class="border-t border-gray-300 font-semibold" />
+        <div class="my-2">
+            <h1 class="font-light text-xl mb-1 text-gray-900">Merk Mobil</h1>
+            <h2 class="font-bold text-2xl text-gray-900"><?php echo $nama_mobil; ?></h2>
+        </div>
+        <hr class="border-t border-gray-300 font-semibold" />
+        <div>
+            <h1 class="font-light mb-1 text-xl text-gray-900">Jenis Mobil</h1>
+            <h2 class="font-bold text-2xl text-gray-900">Manual</h2> <!-- Anda bisa ambil dari database jika disimpan -->
+        </div>
+        <hr class="border-t border-gray-300 font-semibold" />
+        <div class="my-2">
+            <h1 class="font-light mb-1 text-xl text-gray-900">Durasi Sewa</h1>
+            <h2 class="font-bold text-2xl text-gray-900"><?php echo $durasi_penyewaan; ?></h2>
+        </div>
+        <hr class="border-t border-gray-300 font-semibold" />
+        <div class="">
+            <div class="mt-4 flex items-center justify-between">
+                <strong class="font-light text-xl text-slate-700">Subtotal</strong>
+                <p class="font-semibold text-xl text-gray-900">Rp. <?php echo number_format($subtotal, 0, ',', '.'); ?></p>
+            </div>
+            <div class="flex items-center justify-between my-1">
+                <strong class="relative font-light text-xl text-slate-700 group">
                     Biaya Admin
                     <span class="cursor-pointer inline-flex items-center justify-center h-4 w-4 text-[10px] bg-gray-800 text-white rounded-full">?</span>
                     <span class="absolute top-0 bg-white rounded-md py-2.5 px-4 text-xs text-gray-900 shadow-md drop-shadow-md w-[200px] hidden group-hover:inline-block">
-                      Ayo, daftar agar anda mendapatkan gratis pajak untuk setiap perjalanan.
+                        Ayo, daftar agar anda mendapatkan gratis pajak untuk setiap perjalanan.
                     </span>
-                  </strong>
-                  <p class="font-semibold text-xl text-gray-900">Rp. 5000</p>
-                </div>
-                <div class="flex items-center justify-between my-1">
-                  <strong class="relative font-light text-xl text-slate-700 group">
+                </strong>
+                <p class="font-semibold text-xl text-gray-900">Rp. <?php echo number_format($biaya_admin, 0, ',', '.'); ?></p>
+            </div>
+            <div class="flex items-center justify-between my-1">
+                <strong class="relative font-light text-xl text-slate-700 group">
                     Dengan Supir
                     <span class="cursor-pointer inline-flex items-center justify-center h-4 w-4 text-[10px] bg-gray-800 text-white rounded-full">?</span>
                     <span class="absolute top-0 bg-white rounded-md py-2.5 px-4 text-xs text-gray-900 shadow-md drop-shadow-md w-[200px] hidden group-hover:inline-block">
-                      Perjalan anda kali ini bersama supir, berikut ini adalah nominal harga supir.
+                        Perjalan anda kali ini bersama supir, berikut ini adalah nominal harga supir.
                     </span>
-                  </strong>
-                  <p class="font-semibold text-xl text-gray-900">Rp. 400.000</p>
-                </div>
-                <div class="flex items-center justify-between">
-                  <strong class="font-light text-xl text-slate-700">Total</strong>
-                  <p class="font-semibold text-xl text-gray-900">Rp. 1.002.500</p>
-                </div>
-              </div>
+                </strong>
+                <p class="font-semibold text-xl text-gray-900">Rp. <?php echo number_format($biaya_supir, 0, ',', '.'); ?></p>
             </div>
-          </div>
+            <div class="flex items-center justify-between">
+                <strong class="font-light text-xl text-slate-700">Total</strong>
+                <p class="font-semibold text-xl text-gray-900">Rp. <?php echo number_format($total_harga, 0, ',', '.'); ?></p>
+            </div>
+        </div>
+    </div>
+</div>
+          
         </div>
       </div>
     </main>
@@ -302,3 +351,7 @@
     </script>
   </body>
 </html>
+<?php
+// Tutup koneksi ke database
+mysqli_close($conn);
+?>
