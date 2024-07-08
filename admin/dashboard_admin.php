@@ -1,5 +1,16 @@
 <?php
 // Masukkan file koneksi ke database
+
+session_start();
+
+// Periksa apakah session admin sudah terdaftar
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    // Jika belum login, redirect ke halaman login_admin.php
+    header("Location: login_admin.php");
+    exit();
+}
+
+
 require_once('../db_connection.php');
 
 // Function to limit words with handling for empty or null strings
@@ -324,7 +335,7 @@ $sql = "INSERT INTO mobil (nama_mobil, harga_mobil, deskripsi_p1, deskripsi_p2, 
           <ul class="space-y-2 font-medium">
             <!-- dashbord -->
             <li>
-              <a href="#" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
+              <a href="../admin/dashboard_admin.php" class="flex items-center p-2 text-blue bg-white rounded-lg ">
                 <svg class="flex-shrink-0 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
                   <path
                     d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
@@ -356,7 +367,7 @@ $sql = "INSERT INTO mobil (nama_mobil, harga_mobil, deskripsi_p1, deskripsi_p2, 
 
             <!-- notifikasi -->
             <li>
-              <a href="#" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
+              <a href="../admin/pesan_admin.php" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
                 <i class="fa-solid fa-bell text-xl font-semibold"></i>
                 <span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
                 <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-600 bg-white rounded-full">3</span>
@@ -383,7 +394,7 @@ $sql = "INSERT INTO mobil (nama_mobil, harga_mobil, deskripsi_p1, deskripsi_p2, 
           <ul class="space-y-2 mt-4 border-t border-gray-200 pt-4">
             <!-- log out -->
             <li class="">
-              <a href="#" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-red-600">
+              <a href="logout_admin.php" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-red-600">
                 <i class="fa-solid fa-power-off text-2xl"></i>
                 <span class="flex-1 ms-3 whitespace-nowrap">Log out</span>
               </a>

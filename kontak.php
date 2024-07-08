@@ -1,3 +1,35 @@
+<?php
+include './db_connection.php'; // Sertakan file koneksi ke database
+
+// Proses form jika ada data yang dikirimkan
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Ambil nilai dari form
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $subject = isset($_POST['subject']) ? $_POST['subject'] : ''; // Menggunakan isset untuk memeriksa keberadaan nilai subject
+    $message = $_POST['message'];
+
+    // Siapkan statement SQL untuk menyimpan data ke tabel 'messages'
+    $sql = "INSERT INTO messages (full_name, email, subject, message, created_at) VALUES (?, ?, ?, ?, NOW())";
+
+    // Gunakan prepared statement untuk menghindari SQL injection
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssss", $name, $email, $subject, $message);
+
+    // Eksekusi statement
+    if ($stmt->execute()) {
+        echo '<script>alert("Pesan Anda berhasil dikirim.");</script>';
+    } else {
+        echo '<script>alert("Terjadi kesalahan saat mengirim pesan.");</script>';
+    }
+
+    // Tutup statement
+    $stmt->close();
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -35,7 +67,7 @@
               <a href="./wisata.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Wisata</a>
               <a href="./galeri.php" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Galeri</a>
               <a href="./profil.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Profil</a>
-              <a href="./kontak.html" class="pb-1.5 border-b-2 border-transparent border-orange-500 text-orange-500">Kontak</a>
+              <a href="./kontak.php" class="pb-1.5 border-b-2 border-transparent border-orange-500 text-orange-500">Kontak</a>
               <a href="./faq.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">FAQ</a>
               <a href="./index.html" class="pb-1.5 border-b-2 border-transparent">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -121,24 +153,37 @@
                 </div>
 
                 <div class="flex flex-wrap">
-                  <form class="mb-12 w-full shrink-0 grow-0 basis-auto md:px-3 lg:mb-0 lg:w-5/12 lg:px-6">
-                    <div class="mb-3 w-full">
-                      <label class="block font-medium mb-[2px] text-orange-500" htmlFor="exampleInput90"> Name </label>
-                      <input type="text" class="px-2 py-2 border w-full outline-none rounded-md" id="exampleInput90" placeholder="Name" />
-                    </div>
+                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>"
+                                class="mb-12 w-full shrink-0 grow-0 basis-auto md:px-3 lg:mb-0 lg:w-5/12 lg:px-6">
+                                <div class="mb-3 w-full">
+                                    <label class="block font-medium mb-[2px] text-orange-500" htmlFor="name"> Name </label>
+                                    <input type="text" class="px-2 py-2 border w-full outline-none rounded-md"
+                                        id="name" name="name" placeholder="Name" required />
+                                </div>
 
-                    <div class="mb-3 w-full">
-                      <label class="block font-medium mb-[2px] text-orange-500" htmlFor="exampleInput90"> Email </label>
-                      <input type="email" class="px-2 py-2 border w-full outline-none rounded-md" id="exampleInput90" placeholder="Enter your email address" />
-                    </div>
+                                <div class="mb-3 w-full">
+                                    <label class="block font-medium mb-[2px] text-orange-500"
+                                        htmlFor="email"> Email </label>
+                                    <input type="email" class="px-2 py-2 border w-full outline-none rounded-md"
+                                        id="email" name="email" placeholder="Masukan emain anda" required />
+                                </div>
 
-                    <div class="mb-3 w-full">
-                      <label class="block font-medium mb-[2px] text-orange-500" htmlFor="exampleInput90"> Message </label>
-                      <textarea class="px-2 py-2 border rounded-[5px] w-full outline-none" name="" id=""></textarea>
-                    </div>
+                                <div class="mb-3 w-full">
+                                    <label class="block font-medium mb-[2px] text-orange-500" htmlFor="exampleInputSubject"> Subject </label>
+                                    <input type="text" name="subject" class="px-2 py-2 border w-full outline-none rounded-md" id="exampleInputSubject" placeholder="Masukan subjek anda" />
+                                </div>
 
-                    <button type="button" class="mb-6 inline-block w-full rounded bg-orange-500 px-6 py-2.5 font-medium uppercase leading-normal text-white hover:shadow-md hover:bg-orange-600">Send</button>
-                  </form>
+
+                                <div class="mb-3 w-full">
+                                    <label class="block font-medium mb-[2px] text-orange-500"
+                                        htmlFor="message"> Message </label>
+                                    <textarea class="px-2 py-2 border rounded-[5px] w-full outline-none" id="message"
+                                        name="message" placeholder="Masukan pesan anda" required></textarea>
+                                </div>
+
+                                <button type="submit"
+                                    class="mb-6 inline-block w-full rounded bg-orange-500 px-6 py-2.5 font-medium uppercase leading-normal text-white hover:shadow-md hover:bg-orange-600">Kirim</button>
+                            </form>
 
                   <div class="w-full shrink-0 grow-0 basis-auto lg:w-7/12">
                     <div class="flex flex-wrap">
