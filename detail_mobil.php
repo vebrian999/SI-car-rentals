@@ -167,14 +167,15 @@ mysqli_close($conn);
                 datepicker-autoselect-today
                 type="text"
                 class="border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-4 focus:outline-none focus:ring-orange-300 focus:border-orange-300 block w-full ps-10 py-5"
-                placeholder="Select date" />
+                placeholder="Select date" 
+                required />
         </div>
 
         <i class="fa-solid text-3xl text-gray-400 fa-arrow-right"></i>
 
         <div class="">
             <label for="durasi_penyewaan"  class="block text-sm font-medium text-gray-900 sr-only">Durasi</label>
-            <select id="durasi_penyewaan" name="durasi_penyewaan" class="border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-4 focus:outline-none focus:ring-orange-300 focus:border-orange-300 block w-full px-32 py-5">
+            <select id="durasi_penyewaan" name="durasi_penyewaan" class="border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-4 focus:outline-none focus:ring-orange-300 focus:border-orange-300 block w-full px-32 py-5" required>
                 <option value="" disabled selected hidden>Durasi</option>
                 <option value="1">1 Hari</option>
                 <option value="2">2 Hari</option>
