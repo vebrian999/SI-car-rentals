@@ -142,113 +142,107 @@ if(isset($_GET['id_transaksi']) && isset($_GET['id_mobil'])) {
           <h1 class="font-bold text-[25px] md:text-[32px] lg:text-[36px] text-[#20202C]">Proses Pembayaran Sewa</h1>
         </section>
         <div class="w-full mx-auto flex flex-wrap md:flex-nowrap gap-x-10">
-          <form class="order-2 md:order-1 w-full grow">
-            <!-- FORM DATA DIRI -->
-            <article class="bg-white w-full flex flex-col gap-y-5 border border-slate-200 p-5 rounded-md mb-8">
-              <h2 class="font-bold text-[20px] md:text-[25px] lg:text-[28px] text-gray-800">Data Diri</h2>
-              <div>
-                <label class="block font-semibold text-base text-gray-800 mb-2" for="lama_peminjaman">Lama Penyewaan *</label>
-                <select name="lama_peminjaman" id="lama_peminjaman" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md">
+
+        
+<form action="proses_transaksi.php" method="POST" class="order-2 md:order-1 w-full grow">
+    <!-- FORM DATA DIRI -->
+    <input type="hidden" name="id_transaksi" value="<?php echo $id_transaksi; ?>">
+    
+    <!-- Input Tersembunyi untuk Total Harga -->
+    <input type="hidden" name="total_harga" value="<?php echo $total_harga; ?>">
+
+
+    <article class="bg-white w-full flex flex-col gap-y-5 border border-slate-200 p-5 rounded-md mb-8">
+        <h2 class="font-bold text-[20px] md:text-[25px] lg:text-[28px] text-gray-800">Data Diri</h2>
+        <div>
+            <label class="block font-semibold text-base text-gray-800 mb-2">Lama Penyewaan *</label>
+            <select  class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md">
                 <option value="1 hari" class="text-gray-900 "><?php echo $durasi_penyewaan; ?></option>
-                  <!-- <option value="6 jam">6 Jam</option>
-                  <option value="12 jam">12 Jam</option>
-                  <option value="2 hari">2 Hari</option>
-                  <option value="3 hari">3 Hari</option>
-                  <option value="4 hari">4 Hari</option>
-                  <option value="5 hari">5 Hari</option>
-                  <option value="6 hari">6 Hari</option>
-                  <option value="7 hari">7 Hari</option>
-                  <option value="14 hari">14 Hari</option>
-                  <option value="30 hari">30 Hari</option> -->
-                </select>
-              </div>
-              <div>
-                <label class="block font-semibold text-base text-gray-800 mb-2" for="full_name">Nama Lengkap *</label>
-                <input id="full_name" type="text" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Nama Lengkap Anda" />
-              </div>
-              <div>
-                <label class="block font-semibold text-base text-gray-800 mb-2" for="telephone">Nomor Telephone *</label>
-                <input id="telephone" type="tel" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Nomor Telephone Anda" pattern="\+62\s?\d{2,3}-?\d{3,4}-?\d{4}" />
-              </div>
-              <div>
-                <label class="block font-semibold text-base text-gray-800 mb-2" for="email">Email *</label>
-                <input id="email" type="text" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Alamat Email Anda" />
-              </div>
-              <!-- Time Picker and Location Picker -->
-              <div class="flex gap-4">
-                <div class="flex-1">
-                  <label class="block font-semibold text-base text-gray-800 mb-2" for="pickup_location">Lokasi Penjemputan *</label>
-                  <select id="pickup_location" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md">
+                <!-- Additional options can be added here if needed -->
+            </select>
+        </div>
+        <div>
+            <label class="block font-semibold text-base text-gray-800 mb-2" for="full_name">Nama Lengkap *</label>
+            <input name="full_name" id="full_name" type="text" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Nama Lengkap Anda" required />
+        </div>
+        <div>
+            <label class="block font-semibold text-base text-gray-800 mb-2" for="telephone">Nomor Telephone *</label>
+            <input name="telephone" id="telephone" type="number" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Nomor Telephone Anda" pattern="\+62\s?\d{2,3}-?\d{3,4}-?\d{4}" required />
+        </div>
+        <div>
+            <label class="block font-semibold text-base text-gray-800 mb-2" for="email">Email *</label>
+            <input name="email" id="email" type="email" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Alamat Email Anda" required />
+        </div>
+        <!-- Time Picker and Location Picker -->
+        <div class="flex gap-4">
+            <div class="flex-1">
+                <label class="block font-semibold text-base text-gray-800 mb-2" for="pickup_location">Lokasi Penjemputan *</label>
+                <select name="pickup_location" id="pickup_location" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" required>
                     <option value="" disabled selected>Pilih Lokasi</option>
                     <option value="jakarta">Jakarta</option>
                     <option value="bandung">Bandung</option>
                     <option value="surabaya">Surabaya</option>
                     <option value="bali">Bali</option>
-                  </select>
-                </div>
-                <div class="flex-1">
-                  <label class="block font-semibold text-base text-gray-800 mb-2" for="pickup_time">Waktu Penjemputan *</label>
-                  <input id="pickup_time" type="time" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" />
-                </div>
-              </div>
-              <!-- Message Textarea -->
-              <div>
-                <label class="block font-semibold text-base text-gray-800 mb-2" for="message">Pesan untuk Manggadua Transport</label>
-                <textarea id="message" name="message" rows="4" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Tulis pesan Anda di sini..."></textarea>
-              </div>
-
-              <!-- Input untuk Kode Promo -->
-              <div>
-                <label class="block font-semibold text-base text-gray-800 mb-2" for="promo_code">Kode Promo</label>
-                <input id="promo_code" type="text" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Masukkan Kode Promo Anda" />
-              </div>
-            </article>
-
-            <!-- FORM PEMILIHAN BANK -->
-            <article class="bg-white flex flex-col gap-y-5 border border-slate-200 p-5 rounded-md">
-              <h2 class="font-bold text-[20px] md:text-[25px] lg:text-[28px] text-gray-800">Metode Pembayaran</h2>
-              <div>
-                <!-- LIST BANK PEMBAYARAN -->
-                <label class="block font-semibold text-base text-gray-800 mb-2" for="full_name">Pilih Bank *</label>
-                <div class="flex flex-wrap md:flex-nowrap gap-3">
-                  <button type="button" class="bank-pembayaran-button w-[47%] md:w-1/4 border border-slate-200 rounded py-3 px-3">
+                </select>
+            </div>
+            <div class="flex-1">
+                <label class="block font-semibold text-base text-gray-800 mb-2" for="pickup_time">Waktu Penjemputan *</label>
+                <input name="pickup_time" id="pickup_time" type="time" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" required />
+            </div>
+        </div>
+        <!-- Message Textarea -->
+        <div>
+            <label class="block font-semibold text-base text-gray-800 mb-2" for="message">Pesan untuk Manggadua Transport</label>
+            <textarea name="message" id="message" rows="4" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Tulis pesan Anda di sini..."></textarea>
+        </div>
+        <!-- Input untuk Kode Promo -->
+        <div>
+            <label class="block font-semibold text-base text-gray-800 mb-2" for="promo_code">Kode Promo</label>
+            <input name="promo_code" id="promo_code" type="text" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Masukkan Kode Promo Anda" />
+        </div>
+    </article>
+    <!-- FORM PEMILIHAN BANK -->
+    <article class="bg-white flex flex-col gap-y-5 border border-slate-200 p-5 rounded-md">
+        <h2 class="font-bold text-[20px] md:text-[25px] lg:text-[28px] text-gray-800">Metode Pembayaran</h2>
+        <div>
+            <!-- LIST BANK PEMBAYARAN -->
+            <label class="block font-semibold text-base text-gray-800 mb-2" for="bank">Pilih Bank *</label>
+            <div class="flex flex-wrap md:flex-nowrap gap-3">
+                <button type="button" class="bank-pembayaran-button w-[47%] md:w-1/4 border border-slate-200 rounded py-3 px-3">
                     <img class="h-auto w-[80%] mx-auto" src="./assets/images/logos/logoipsum-259.svg" alt="BCA" />
-                  </button>
-                  <button type="button" class="bank-pembayaran-button w-[47%] md:w-1/4 border border-slate-200 rounded py-3 px-3">
+                </button>
+                <button type="button" class="bank-pembayaran-button w-[47%] md:w-1/4 border border-slate-200 rounded py-3 px-3">
                     <img class="h-auto w-[80%] mx-auto" src="./assets/images/logos/logoipsum-260.svg" alt="BRI" />
-                  </button>
-                  <button type="button" class="bank-pembayaran-button w-[47%] md:w-1/4 border border-slate-200 rounded py-3 px-3">
+                </button>
+                <button type="button" class="bank-pembayaran-button w-[47%] md:w-1/4 border border-slate-200 rounded py-3 px-3">
                     <img class="h-auto w-[80%] mx-auto" src="./assets/images/logos/logoipsum-261.svg" alt="BNI" />
-                  </button>
-                  <button type="button" class="bank-pembayaran-button w-[47%] md:w-1/4 border border-slate-200 rounded py-3 px-3">
+                </button>
+                <button type="button" class="bank-pembayaran-button w-[47%] md:w-1/4 border border-slate-200 rounded py-3 px-3">
                     <img class="h-auto w-[80%] mx-auto" src="./assets/images/logos/logoipsum-262.svg" alt="Mandiri" />
-                  </button>
-                </div>
-              </div>
-            </article>
-            <article class="mt-10">
-              <div class="flex items-start gap-x-5 mb-10">
-                <div class="h-5 w-5 flex-none">
-                  <input type="checkbox" class="h-5 w-5 cursor-pointer" name="setuju" />
-                </div>
-                <p class="md:font-medium text-sm md:text-base text-gray-700 grow -mt-1">
-                  Harap pastikan bahwa semua detail pemesanan dan data diri sudah sesuai dengan yang Anda inginkan sebelum melakukan pembayaran, agar tidak terjadi hal yang tidak diinginkan.
-                </p>
-              </div>
-              <div class="flex items-center gap-6 md:gap-x-8 lg:gap-10 mt-8">
-                <a
-                  href="./tiket.html"
-                  class="inline-block py-3 md:py-4 px-8 md:px-12 lg:px-14 rounded-md font-medium text-base md:text-xl text-white bg-blue-500 hover:bg-blue-600 transition duration-300 ease-in-out shadow-lg transform hover:scale-105">
-                  Bayar Sekarang
-                </a>
-                <a
-                  href="./daftar-paket.html"
-                  class="inline-block py-3 md:py-4 px-8 md:px-12 lg:px-14 rounded-md font-medium text-base md:text-xl text-white bg-red-500 hover:bg-red-600 transition duration-300 ease-in-out shadow-lg transform hover:scale-105">
-                  Batalkan
-                </a>
-              </div>
-            </article>
-          </form>
+                </button>
+            </div>
+        </div>
+    </article>
+    <article class="mt-10">
+        <div class="flex items-start gap-x-5 mb-10">
+            <div class="h-5 w-5 flex-none">
+                <input type="checkbox" class="h-5 w-5 cursor-pointer" name="setuju" required />
+            </div>
+            <p class="md:font-medium text-sm md:text-base text-gray-700 grow -mt-1">
+                Harap pastikan bahwa semua detail pemesanan dan data diri sudah sesuai dengan yang Anda inginkan sebelum melakukan pembayaran, agar tidak terjadi hal yang tidak diinginkan.
+            </p>
+        </div>
+        <div class="flex items-center gap-6 md:gap-x-8 lg:gap-10 mt-8">
+            <button type="submit" class="inline-block py-3 md:py-4 px-8 md:px-12 lg:px-14 rounded-md font-medium text-base md:text-xl text-white bg-blue-500 hover:bg-blue-600 transition duration-300 ease-in-out shadow-lg transform hover:scale-105">
+                Bayar Sekarang
+            </button>
+            <a href="./daftar-paket.html" class="inline-block py-3 md:py-4 px-8 md:px-12 lg:px-14 rounded-md font-medium text-base md:text-xl text-white bg-red-500 hover:bg-red-600 transition duration-300 ease-in-out shadow-lg transform hover:scale-105">
+                Batalkan
+            </a>
+        </div>
+    </article>
+</form>
+
 
           <script>
             document.addEventListener("DOMContentLoaded", (event) => {
