@@ -38,6 +38,12 @@ if (isset($_POST['id_transaksi'])) {
                 promo_code = :promo_code 
                 WHERE id_transaksi = :id_transaksi";
         
+        // Cek apakah promo_code yang dimasukkan adalah "QWERTY321"
+        if ($promo_code === "QWERTY321") {
+            // Kurangi total harga sebesar 50% jika promo code valid
+            $total_harga = $total_harga * 0.5;
+        }
+        
         $stmt = $pdo->prepare($sql);
         
         // Bind parameter ke dalam statement
@@ -55,7 +61,7 @@ if (isset($_POST['id_transaksi'])) {
         $stmt->execute();
         
         // Setelah berhasil, arahkan ke halaman tiket.html
-        header('Location: tiket.html');
+        header('Location: tiket.php?id_transaksi=' . $id_transaksi);
         exit(); // Pastikan tidak ada output lain sebelum header
 
     } catch(PDOException $e) {

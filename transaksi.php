@@ -179,10 +179,10 @@ if(isset($_GET['id_transaksi']) && isset($_GET['id_mobil'])) {
                 <label class="block font-semibold text-base text-gray-800 mb-2" for="pickup_location">Lokasi Penjemputan *</label>
                 <select name="pickup_location" id="pickup_location" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" required>
                     <option value="" disabled selected>Pilih Lokasi</option>
-                    <option value="jakarta">Jakarta</option>
-                    <option value="bandung">Bandung</option>
-                    <option value="surabaya">Surabaya</option>
-                    <option value="bali">Bali</option>
+                    <option value="Jakarta">Jakarta</option>
+                    <option value="Bandung">Bandung</option>
+                    <option value="Yogyakarta">Yogyakarta</option>
+                    <option value="Bali">Bali</option>
                 </select>
             </div>
             <div class="flex-1">
@@ -195,11 +195,48 @@ if(isset($_GET['id_transaksi']) && isset($_GET['id_mobil'])) {
             <label class="block font-semibold text-base text-gray-800 mb-2" for="message">Pesan untuk Manggadua Transport</label>
             <textarea name="message" id="message" rows="4" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Tulis pesan Anda di sini..."></textarea>
         </div>
+
+        
         <!-- Input untuk Kode Promo -->
-        <div>
-            <label class="block font-semibold text-base text-gray-800 mb-2" for="promo_code">Kode Promo</label>
-            <input name="promo_code" id="promo_code" type="text" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Masukkan Kode Promo Anda" />
-        </div>
+<div>
+    <label class="block font-semibold text-base text-gray-800 mb-1.5" for="promo_code">Kode Promo</label>
+    <input name="promo_code" id="promo_code" type="text" class="bg-slate-100 py-3 px-4 border border-slate-200 w-full rounded-md" placeholder="Masukkan Kode Promo Anda" />
+</div>
+<div class="">
+    <button type="button" onclick="checkPromoCode()" class="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-md shadow-md">Cek</button>
+</div>
+
+<script>
+    function checkPromoCode() {
+        // Ambil nilai kode promo dari input
+        var promoCode = document.getElementById('promo_code').value.trim();
+        
+        // Kode promo yang benar
+        var validPromoCode = "QWERTY321";
+        
+        // Jika kode promo sesuai
+        if (promoCode === validPromoCode) {
+            // Kurangi total harga 50%
+            var hargaAwal = <?php echo $total_harga; ?>;
+            var hargaDiskon = hargaAwal * 0.5;
+            var hargaSetelahDiskon = hargaAwal - hargaDiskon;
+            
+            // Tampilkan pesan promo berhasil
+            alert("Promo berhasil ditambahkan!");
+            
+            // Tampilkan section diskon
+            document.getElementById('diskonSection').style.display = 'flex';
+            
+            // Update tampilan total harga dengan harga setelah diskon
+            document.getElementById('totalHarga').innerHTML = "Rp. " + hargaSetelahDiskon.toLocaleString('id-ID');
+        } else {
+            // Jika kode promo salah
+            alert("Kode promo salah.");
+        }
+    }
+</script>
+
+
     </article>
     <!-- FORM PEMILIHAN BANK -->
     <article class="bg-white flex flex-col gap-y-5 border border-slate-200 p-5 rounded-md">
@@ -298,9 +335,13 @@ if(isset($_GET['id_transaksi']) && isset($_GET['id_mobil'])) {
                 </strong>
                 <p class="font-semibold text-xl text-gray-900">Rp. <?php echo number_format($biaya_supir, 0, ',', '.'); ?></p>
             </div>
+            <div class="flex items-center justify-between " id="diskonSection" style="display: none;">
+                <strong class="font-light text-xl text-green-500 ">Diskon</strong>
+                <p class="font-semibold text-xl text-green-500">50%</p>
+            </div>
             <div class="flex items-center justify-between">
-                <strong class="font-light text-xl text-slate-700">Total</strong>
-                <p class="font-semibold text-xl text-gray-900">Rp. <?php echo number_format($total_harga, 0, ',', '.'); ?></p>
+            <strong class="font-light text-xl text-slate-700">Total</strong>
+            <p id="totalHarga" class="font-semibold text-xl text-gray-900">Rp. <?php echo number_format($total_harga, 0, ',', '.'); ?></p>
             </div>
         </div>
     </div>

@@ -1,26 +1,72 @@
+<?php
+// Pastikan id_transaksi tersedia dalam URL atau dari sesi, jika perlu
+if (isset($_GET['id_transaksi'])) {
+    try {
+        // Ambil id_transaksi dari URL
+        $id_transaksi = $_GET['id_transaksi'];
+        
+        // Lakukan koneksi ke database menggunakan PDO
+        $pdo = new PDO('mysql:host=localhost;dbname=rental_mobil', 'root', '');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+        // Query untuk mengambil data transaksi dan mobil
+        $sql = "SELECT t.*, m.nama_mobil
+                FROM transaksi t
+                LEFT JOIN mobil m ON t.id_mobil = m.id_mobil
+                WHERE t.id_transaksi = :id_transaksi";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id_transaksi', $id_transaksi);
+        $stmt->execute();
+        
+        // Ambil hasil query
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($result) {
+            // Extract data ke variabel
+            $full_name = $result['full_name'];
+            $pickup_location = $result['pickup_location'];
+            $pickup_time = $result['pickup_time'];
+            $total_harga = $result['total_harga'];
+            $durasi_penyewaan = $result['durasi_penyewaan'];
+            $dengan_supir = $result['dengan_supir'];
+            $tanggal_penyewaan = $result['tanggal_penyewaan'];
+            $nama_mobil = $result['nama_mobil'];
+
+            // Konversi dengan_supir ke Yes/No
+            $dengan_supir_text = $dengan_supir == 1 ? 'Ya' : 'Tidak';
+        } else {
+            echo "Data transaksi tidak ditemukan.";
+            exit(); // Hentikan eksekusi jika data tidak ditemukan
+        }
+        
+    } catch(PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+} else {
+    echo "ID Transaksi tidak ditemukan.";
+    exit(); // Hentikan eksekusi jika ID Transaksi tidak ditemukan
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tiket | ManggaDua Transport</title>
-    <link rel="stylesheet" href="./assets/css/tailwind.css" />
-    <link rel="stylesheet" href="./assets/css/input.css" />
+    <link rel="stylesheet" href="./assets/css/tailwind.css">
+    <link rel="stylesheet" href="./assets/css/input.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer" />
-  </head>
-  <body>
-    <!-- awal header -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+     <!-- awal header -->
     <header class="">
       <div>
         <!-- NAVIGASI -->
@@ -91,115 +137,107 @@
     </header>
     <!-- akhir header -->
 
-    <!-- awal main -->
     <main>
-      <div id="content" class="content">
-        <!-- awal tiket -->
-        <article class="mt-20">
-          <!-- <style>
-            .barcode {
-              left: 50%;
-              box-shadow: 1px 0 0 1px, 5px 0 0 1px, 10px 0 0 1px, 11px 0 0 1px, 15px 0 0 1px, 18px 0 0 1px, 22px 0 0 1px, 23px 0 0 1px, 26px 0 0 1px, 30px 0 0 1px, 35px 0 0 1px, 37px 0 0 1px, 41px 0 0 1px, 44px 0 0 1px, 47px 0 0 1px,
-                51px 0 0 1px, 56px 0 0 1px, 59px 0 0 1px, 64px 0 0 1px, 68px 0 0 1px, 72px 0 0 1px, 74px 0 0 1px, 77px 0 0 1px, 81px 0 0 1px, 85px 0 0 1px, 88px 0 0 1px, 92px 0 0 1px, 95px 0 0 1px, 96px 0 0 1px, 97px 0 0 1px, 101px 0 0 1px,
-                105px 0 0 1px, 109px 0 0 1px, 110px 0 0 1px, 113px 0 0 1px, 116px 0 0 1px, 120px 0 0 1px, 123px 0 0 1px, 127px 0 0 1px, 130px 0 0 1px, 131px 0 0 1px, 134px 0 0 1px, 135px 0 0 1px, 138px 0 0 1px, 141px 0 0 1px, 144px 0 0 1px,
-                147px 0 0 1px, 148px 0 0 1px, 151px 0 0 1px, 155px 0 0 1px, 158px 0 0 1px, 162px 0 0 1px, 165px 0 0 1px, 168px 0 0 1px, 173px 0 0 1px, 176px 0 0 1px, 177px 0 0 1px, 180px 0 0 1px;
-              display: inline-block;
-              transform: translateX(-90px);
-            }
-          </style> -->
-          <div class="flex flex-col items-center justify-center min-h-screen bg-center bg-cover" style="background-image: url(./assets/images/images/fast-car.jpg)">
-            <div class="absolute top-20 h-full bg-blue-900 opacity-80 inset-0 z-0"></div>
-            <div class="max-w-md w-full h-full mx-auto z-10 bg-orange-500 rounded-3xl">
-              <div class="flex flex-col">
-                <div class="bg-white relative drop-shadow-2xl rounded-3xl p-4 m-4">
-                  <div class="flex-none sm:flex">
-                    <div class="relative h-32 w-32 sm:mb-0 mb-3 hidden">
-                      <img src="https://tailwindcomponents.com/storage/avatars/njkIbPhyZCftc4g9XbMWwVsa7aGVPajYLRXhEeoo.jpg" alt="aji" class="w-32 h-32 object-cover rounded-2xl" />
-                      <a href="#" class="absolute -right-2 bottom-2 -ml-3 text-white p-1 text-xs bg-green-400 hover:bg-green-500 font-medium tracking-wider rounded-full transition ease-in duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
-                          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
-                        </svg>
-                      </a>
-                    </div>
-                    <div class="flex-auto justify-evenly">
-                      <div class="flex items-center justify-between">
-                        <div class="flex items-center my-1 justify-between">
-                          <h2 class="font-medium">
-                            ManggaDua <br />
-                            Transport
-                          </h2>
-                        </div>
-                        <div class="ml-auto text-blue-800">
-                          <p>
-                            Tanggal Penyewaan : <br> 2024-07-08
-                          </p>
-                        </div>
-                      </div>
-                      <div class="border-b border-dashed border-b-2 my-5"></div>
-                      <div class="flex items-center">
-                        <div class="flex flex-col mx-auto">
-                          <img src="./assets/images/logos/logoipsum-260.svg" class="" />
-                        </div>
-                      </div>
-                      <div class="border-b border-dashed border-b-2 mb-5 pt-5">
-                        <div class="absolute rounded-full w-5 h-5 bg-orange-500 -mt-2 -left-2"></div>
-                        <div class="absolute rounded-full w-5 h-5 bg-orange-500 -mt-2 -right-2"></div>
-                      </div>
-                      <div class="flex items-center mb-5 p-5 text-sm">
+        <div id="content" class="content">
+            <article class="mt-20">
+                <div class="flex flex-col items-center justify-center min-h-screen bg-center bg-cover" style="background-image: url(./assets/images/images/fast-car.jpg)">
+                    <div class="absolute top-20 h-full bg-blue-900 opacity-80 inset-0 z-0"></div>
+                    <div class="max-w-md w-full h-full mx-auto z-10 bg-orange-500 rounded-3xl">
                         <div class="flex flex-col">
-                          <span class="text-sm">Nama Pemeasan</span>
-                          <div class="font-semibold">Renaldy Saputra</div>
-                        </div>
-                        <div class="flex flex-col ml-auto">
-                          <span class="">Lokasi dan Waktu Penjemputan</span>
-                          <div class="font-semibold">Yogyakarta <span>24:00 AM</span></div>
-                        </div>
-                      </div>
-                      <div class="flex items-center mb-4 px-5">
-                        <div class="flex flex-col text-sm">
-                          <span class="">Merek Mobil</span>
-                          <div class="font-semibold">Vellfire HEV</div>
-                        </div>
-                        <div class="flex flex-col mx-auto text-sm">
-                          <span class="">Durasi Sewa</span>
-                          <div class="font-semibold">1 Hari</div>
-                        </div>
-                        <div class="flex flex-col text-sm">
-                          <span class="">Supir</span>
-                          <div class="font-semibold">Ya</div>
-                        </div>
-                      </div>
-                      <div class="border-b border-dashed border-b-2 my-5 pt-5">
-                        <div class="absolute rounded-full w-5 h-5 bg-orange-500 -mt-2 -left-2"></div>
-                        <div class="absolute rounded-full w-5 h-5 bg-orange-500 -mt-2 -right-2"></div>
-                      </div>
-                      <div class="flex items-center px-5 pb-3 text-sm">
-                        <div class="flex flex-col">
-                          <span class="">Harga</span>
-                          <div class="font-semibold text-lg">Rp. 1.002.500</div>
-                        </div>
-                      </div>
-                      <div class="flex flex-col justify-center text-sm">
-                        <h6 class="font-bold text-center">Scan here</h6>
-                        <div class="flex justify-center">
-                          <img src="./assets/images/images/qr-code.svg" class="w-20" alt="" />
-                        </div>
-                        <!-- <div class="barcode h-14 w-0 inline-block mt-4 relative left-auto">
-                          <img src="./assets/images/images/qr-code.svg" alt="" />
-                        </div> -->
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </article>
-      </div>
-      <!-- akhir tiket -->
-    </main>
-    <!-- akhir  main -->
+                            <div class="bg-white relative drop-shadow-2xl rounded-3xl p-4 m-4">
+                                <div class="flex-none sm:flex">
+                                    <div class="relative h-32 w-32 sm:mb-0 mb-3 hidden">
+                                        <!-- Placeholder untuk gambar profil -->
+                                        <img src="https://tailwindcomponents.com/storage/avatars/njkIbPhyZCftc4g9XbMWwVsa7aGVPajYLRXhEeoo.jpg" alt="Profile Image" class="w-32 h-32 object-cover rounded-2xl" />
+                                        <!-- Tombol edit profil -->
+                                        <a href="#" class="absolute -right-2 bottom-2 -ml-3 text-white p-1 text-xs bg-green-400 hover:bg-green-500 font-medium tracking-wider rounded-full transition ease-in duration-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+                                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="flex-auto justify-evenly">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center my-1 justify-between">
+                                                <h2 class="font-medium">
+                                                    ManggaDua <br />
+                                                    Transport
+                                                </h2>
+                                            </div>
+                                            <!-- Tampilkan tanggal penyewaan -->
+                                            <div class="ml-auto text-blue-800">
+                                                <p>
+                                                    Tanggal Penyewaan : <br> <?php echo $tanggal_penyewaan; ?>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="border-b border-dashed border-b-2 my-5"></div>
+                                        <div class="flex items-center">
+                                            <div class="flex flex-col mx-auto">
+                                                <img src="./assets/images/logos/logoipsum-260.svg" class="" />
+                                            </div>
+                                        </div>
+                                        <div class="border-b border-dashed border-b-2 mb-5 pt-5">
+                                            <div class="absolute rounded-full w-5 h-5 bg-orange-500 -mt-2 -left-2"></div>
+                                            <div class="absolute rounded-full w-5 h-5 bg-orange-500 -mt-2 -right-2"></div>
+                                        </div>
 
+                                        <!-- Informasi detail transaksi -->
+                                        <div class="flex items-center mb-5 p-5 text-sm">
+                                            <div class="flex flex-col">
+                                                <span class="text-sm">Nama Pemesan</span>
+                                                <div class="font-semibold"><?php echo $full_name; ?></div>
+                                            </div>
+                                            <div class="flex flex-col ml-auto">
+                                                <span class="">Lokasi dan Waktu Penjemputan</span>
+                                                <div class="font-semibold"><?php echo $pickup_location; ?> <span class="ml-1"><?php echo $pickup_time; ?></span></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center mb-4 px-5">
+                                            <div class="flex flex-col text-sm">
+                                                <span class="">Merek Mobil</span>
+                                                <!-- Tampilkan nama mobil -->
+                                                <div class="font-semibold"><?php echo $nama_mobil; ?></div>
+                                            </div>
+                                            <div class="flex flex-col mx-auto text-sm">
+                                                <span class="">Durasi Sewa</span>
+                                                <div class="font-semibold"><?php echo $durasi_penyewaan; ?> Hari</div>
+                                            </div>
+                                            <div class="flex flex-col text-sm">
+                                                <span class="">Supir</span>
+                                                <!-- Tampilkan apakah dengan supir atau tidak -->
+                                                <div class="font-semibold"><?php echo $dengan_supir_text; ?></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="border-b border-dashed border-b-2 my-5 pt-5">
+                                            <div class="absolute rounded-full w-5 h-5 bg-orange-500 -mt-2 -left-2"></div>
+                                            <div class="absolute rounded-full w-5 h-5 bg-orange-500 -mt-2 -right-2"></div>
+                                        </div>
+                                        <div class="flex items-center px-5 pb-3 text-sm">
+                                            <div class="flex flex-col">
+                                                <span class="">Harga</span>
+                                                <!-- Tampilkan total harga -->
+                                                <div class="font-semibold text-lg">Rp. <?php echo number_format($total_harga, 0, ',', '.'); ?></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col justify-center text-sm">
+                                            <h6 class="font-bold text-center">Scan here</h6>
+                                            <div class="flex justify-center">
+                                                <img src="./assets/images/images/qr-code.svg" class="w-20" alt="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    
     <!-- awal foooter -->
     <!-- FOOTER -->
     <footer class="bg-white">
