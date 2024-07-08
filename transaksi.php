@@ -85,7 +85,7 @@ if(isset($_GET['id_transaksi']) && isset($_GET['id_mobil'])) {
         <!-- NAVIGASI KANAN -->
         <div class="hidden font-medium text-base text-gray-800 md:flex items-center gap-x-6">
           <a href="./index.html" class="pb-1.5 border-b-[2px] border-transparent">Home</a>
-          <a href="./daftar-paket.html" class="pb-1.5 border-b-[2px] border-transparent">Daftar Paket</a>
+          <a href="./daftar-paket.php" class="pb-1.5 border-b-[2px] border-transparent">Daftar Paket</a>
           <a href="./wisata.html" class="pb-1.5 border-b-[2px] border-transparent">Wisata</a>
           <a href="./faq.html" class="pb-1.5 border-b-[2px] border-transparent">FAQ</a>
           <a href="./index.html" class="pb-1.5 border-b-[2px] border-transparent"
@@ -116,7 +116,7 @@ if(isset($_GET['id_transaksi']) && isset($_GET['id_mobil'])) {
           <h3 class="font-medium text-lg text-gray-900">Menu</h3>
           <div class="flex flex-col gap-y-3.5 font-medium text-base text-gray-800 mt-5">
             <a href="./index.html">Home</a>
-            <a href="./daftar-paket.html">Daftar Paket</a>
+            <a href="./daftar-paket.php">Daftar Paket</a>
             <a href="./wisata.html">Wisata</a>
             <a href="./faq.html">FAQ</a>
             <a href="./index.html"
@@ -273,7 +273,7 @@ if(isset($_GET['id_transaksi']) && isset($_GET['id_mobil'])) {
             <button type="submit" class="inline-block py-3 md:py-4 px-8 md:px-12 lg:px-14 rounded-md font-medium text-base md:text-xl text-white bg-blue-500 hover:bg-blue-600 transition duration-300 ease-in-out shadow-lg transform hover:scale-105">
                 Bayar Sekarang
             </button>
-            <a href="./daftar-paket.html" class="inline-block py-3 md:py-4 px-8 md:px-12 lg:px-14 rounded-md font-medium text-base md:text-xl text-white bg-red-500 hover:bg-red-600 transition duration-300 ease-in-out shadow-lg transform hover:scale-105">
+            <a href="./daftar-paket.php" class="inline-block py-3 md:py-4 px-8 md:px-12 lg:px-14 rounded-md font-medium text-base md:text-xl text-white bg-red-500 hover:bg-red-600 transition duration-300 ease-in-out shadow-lg transform hover:scale-105">
                 Batalkan
             </a>
         </div>

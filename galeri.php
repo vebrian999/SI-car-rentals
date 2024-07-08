@@ -30,9 +30,9 @@
             <!-- NAVIGASI KANAN -->
             <div class="hidden font-medium text-base text-gray-800 md:flex items-center gap-x-6">
               <a href="./index.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Home</a>
-              <a href="./daftar-paket.html" class="pb-1.5 border-b-[2px] border-transparent border-orange-500 hover:border-orange-500 hover:text-orange-500">Daftar Paket</a>
+              <a href="./daftar-paket.php" class="pb-1.5 border-b-[2px] border-transparent border-orange-500 hover:border-orange-500 hover:text-orange-500">Daftar Paket</a>
               <a href="./wisata.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Wisata</a>
-              <a href="./galeri.html" class="pb-1.5 border-b-2 border-transparent border-orange-500 text-orange-500">Galeri</a>
+              <a href="./galeri.php" class="pb-1.5 border-b-2 border-transparent border-orange-500 text-orange-500">Galeri</a>
               <a href="./profil.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Profil</a>
               <a href="./kontak.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Kontak</a>
               <a href="./faq.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">FAQ</a>
@@ -64,7 +64,7 @@
               <h3 class="font-medium text-lg text-gray-900">Menu</h3>
               <div class="flex flex-col gap-y-3.5 font-medium text-base text-gray-800 mt-5">
                 <a href="./index.html" class="text-orange-500">Home</a>
-                <a href="./daftar-paket.html">Daftar Paket</a>
+                <a href="./daftar-paket.php">Daftar Paket</a>
                 <a href="./wisata.html">Wisata</a>
                 <a href="./faq.html">FAQ</a>
                 <a href="./index.html"
@@ -95,10 +95,6 @@
             <div class="flex gap-x-5 w-full px-14 mt-7">
 <a class="bg-blue-500 py-3 px-7 rounded-lg font-medium text-base text-white hover:bg-blue-600" href="javascript:void(0)" onclick="document.getElementById('uploadForm').style.display='block'">Post Photo</a>
 
-
-
-              <a class="bg-yellow-500 py-3 px-7 rounded-lg font-medium text-base text-white hover:bg-yellow-600" href="">Edit Photo</a>
-              <a class="bg-red-500 py-3 px-7 rounded-lg font-medium text-base text-white hover:bg-red-600" href="">Delete Photo</a>
             </div>
             <div id="uploadForm" style="display:none;">
   <form action="upload_photo.php" method="post" enctype="multipart/form-data" class="bg-white p-5 rounded-lg shadow-lg">
@@ -119,6 +115,7 @@
 
     <main>
       <div id="content" class="content container">
+
         <section>
           <article class="flex justify-between items-center my-10">
             <div>
@@ -300,7 +297,6 @@
           });
         </script>
 
-
         <hr class="my-5 border-orange-500" />
 
         <article>
@@ -315,7 +311,8 @@
           </section>
         </article>
 
-         <article class="my-10">
+
+        <article class="my-10">
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             <!-- Card 1 -->
             <a href="#" class="overflow-hidden group">
@@ -387,15 +384,6 @@
           <div class="text-center my-8">
             <a href="#" class="underline font-semibold text-lg">Tampilkan lebih banyak item +</a>
           </div>
-        </article>
-
-        <article>
-          <section class="flex justify-between items-center my-10">
-            <div>
-              <h1 class="text-5xl font-semibold my-5">Beberapa foto lainya</h1>
-              <p class="text-base font-normal">berikut ini adalah berisi foto foto pengalaman customer kami yang lainya.</p>
-            </div>
-          </section>
         </article>
 
 <!-- awal portofolio -->

@@ -1,69 +1,72 @@
 <?php
-session_start();
+// Masukkan file koneksi ke database
+require_once('../db_connection.php');
 
-// Cek apakah session admin_logged_in sudah ada dan bernilai true
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    // Jika tidak, redirect ke halaman login
-    header("Location: login.php");
-    exit;
+// Function to limit words with handling for empty or null strings
+function limit_words($string, $word_limit) {
+    if (empty($string)) {
+        return "";
+    }
+    $words = explode(" ", $string);
+    return implode(" ", array_splice($words, 0, $word_limit));
 }
 
-include '../db_connection.php';
+// Query untuk mengambil data mobil
+$sql = "SELECT * FROM mobil";
+$result = mysqli_query($conn, $sql);
 
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Prepare and bind SQL statement with prepared statement
-    $stmt = $conn->prepare("INSERT INTO mobil (jenis_mobil, harga_mobil, supir, lama_pinjaman, bank, jumlah_pintu, persneling, deskripsi_mobil, hanya_supir, gambar_mobil) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+// Debugging untuk melihat data yang dikirimkan dari form
+var_dump($_POST);
 
-    // Bind parameters with form data
-    $stmt->bind_param("sssissssss", $jenis_mobil, $harga_mobil, $supir, $lama_pinjaman, $bank, $jumlah_pintu, $persneling, $deskripsi_mobil, $hanya_supir, $gambar_mobil);
-
-    // Set parameters from form input
-    $jenis_mobil = $_POST['jenis_mobil'];
+// Memeriksa apakah form telah dikirimkan
+if (isset($_POST['submit'])) {
+    // Mengambil data dari formulir tambah mobil
+    $nama_mobil = $_POST['nama_mobil'];
     $harga_mobil = $_POST['harga_mobil'];
-    $supir = $_POST['supir'];
-    $lama_pinjaman = $_POST['lama_pinjaman'];
-    $bank = $_POST['bank'];
-    
-    // Validate and convert jumlah_pintu to integer
-    $jumlah_pintu = isset($_POST['jumlah_pintu']) ? intval($_POST['jumlah_pintu']) : 0;
+    $deskripsi_p1 = $_POST['deskripsi_p1'];
+    $deskripsi_p2 = $_POST['deskripsi_p2'];
+    $deskripsi_p3 = $_POST['deskripsi_p3'];
+    $deskripsi_p4 = $_POST['deskripsi_p4'];
 
-    $persneling = $_POST['persneling'];
-    $deskripsi_mobil = $_POST['deskripsi_mobil'];
-    $hanya_supir = isset($_POST['hanya_supir']) ? $_POST['hanya_supir'] : 0;
+    // Meng-handle upload gambar mobil
+    $gambar1 = $_FILES['gambar1']['name'];
+    $gambar2 = $_FILES['gambar2']['name'];
+    $gambar3 = $_FILES['gambar3']['name'];
+    $gambar4 = $_FILES['gambar4']['name'];
 
-    // Handle file upload
-    $gambar_mobil = $_FILES['gambar_mobil']['name'];
-    $gambar_tmp = $_FILES['gambar_mobil']['tmp_name'];
-    $gambar_dest = "../uploads/" . $gambar_mobil;
+    // Temporary file paths untuk upload
+    $gambar1_tmp = $_FILES['gambar1']['tmp_name'];
+    $gambar2_tmp = $_FILES['gambar2']['tmp_name'];
+    $gambar3_tmp = $_FILES['gambar3']['tmp_name'];
+    $gambar4_tmp = $_FILES['gambar4']['tmp_name'];
 
-    // Attempt to move uploaded file to destination
-    if (move_uploaded_file($gambar_tmp, $gambar_dest)) {
-        // Execute prepared statement
-        if ($stmt->execute()) {
-            echo "Data mobil berhasil ditambahkan.";
-        } else {
-            echo "Gagal menambahkan data mobil: " . $stmt->error;
-        }
+    // Lokasi penyimpanan gambar (disesuaikan dengan struktur folder di server)
+    $upload_dir = '../uploads/';
+
+    // Memindahkan gambar ke folder uploads
+    move_uploaded_file($gambar1_tmp, $upload_dir . $gambar1);
+    move_uploaded_file($gambar2_tmp, $upload_dir . $gambar2);
+    move_uploaded_file($gambar3_tmp, $upload_dir . $gambar3);
+    move_uploaded_file($gambar4_tmp, $upload_dir . $gambar4);
+
+// Query untuk memasukkan data baru ke dalam tabel mobil
+$sql = "INSERT INTO mobil (nama_mobil, harga_mobil, deskripsi_p1, deskripsi_p2, deskripsi_p3, deskripsi_p4, gambar1, gambar2, gambar3, gambar4) 
+        VALUES ('$nama_mobil', '$harga_mobil', '$deskripsi_p1', '$deskripsi_p2', '$deskripsi_p3', '$deskripsi_p4', '$gambar1', '$gambar2', '$gambar3', '$gambar4')";
+
+    if (mysqli_query($conn, $sql)) {
+        // Redirect ke halaman dashboard atau halaman lain jika berhasil
+        header("Location: dashboard_admin.php");
+        exit();
     } else {
-        echo "Failed to upload file.";
+        // Jika query gagal dieksekusi
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
 
+    // Menutup koneksi database
+    mysqli_close($conn);
 }
-
-$sql = "SELECT * FROM mobil";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
 ?>
 
-    <?php
-} else {
-    echo "Tidak ada data mobil.";
-}
-
-$conn->close();
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -141,9 +144,6 @@ $conn->close();
     </header>
     <!-- akhir header -->
 
-    <!-- awal main -->
-    <main>
-    <!-- awal main -->
     <main>
         <div id="content" class="content">
             <div class="mt-20 p-4 sm:ml-64 md:mt-10">
@@ -151,156 +151,161 @@ $conn->close();
                     <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50">
                         <h2 class="text-2xl font-semibold text-gray-900">Daftar Mobil</h2>
                     </div>
-                    <!-- Tombol Tambah -->
-                    <div class="flex justify-end mb-4">
-                        <button onclick="toggleForm()" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Tambah Mobil</button>
-                    </div>
 
-                    <!-- Form Tambah Mobil (dibuat tersembunyi secara default) -->
-                    <div id="formTambahMobil" class="hidden">
-                        <form action="dashboard_admin.php" method="POST" enctype="multipart/form-data" class="space-y-4">
-                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                                <!-- Jenis Mobil -->
-                                <div class="sm:col-span-3">
-                                    <label for="jenis_mobil" class="block text-sm font-medium text-gray-700">Jenis Mobil</label>
-                                    <input type="text" name="jenis_mobil" id="jenis_mobil" autocomplete="given-name" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                                </div>
 
-                                <!-- Harga Mobil -->
-                                <div class="sm:col-span-3">
-                                    <label for="harga_mobil" class="block text-sm font-medium text-gray-700">Harga Mobil</label>
-                                    <input type="text" name="harga_mobil" id="harga_mobil" autocomplete="family-name" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                                </div>
-
-                                <!-- Supir -->
-                                <div class="sm:col-span-3">
-                                    <label for="supir" class="block text-sm font-medium text-gray-700">Supir</label>
-                                    <input type="text" name="supir" id="supir" autocomplete="street-address" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                                </div>
-
-                                <!-- Lama Pinjaman -->
-                                <div class="sm:col-span-3">
-                                    <label for="lama_pinjaman" class="block text-sm font-medium text-gray-700">Lama Pinjaman</label>
-                                    <input type="text" name="lama_pinjaman" id="lama_pinjaman" autocomplete="address-line1" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                                </div>
-
-                                <!-- Bank -->
-                                <div class="sm:col-span-3">
-                                    <label for="bank" class="block text-sm font-medium text-gray-700">Bank</label>
-                                    <input type="text" name="bank" id="bank" autocomplete="address-line2" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                                </div>
-
-                                <!-- Jumlah Pintu -->
-                                <div class="sm:col-span-3">
-                                    <label for="jumlah_pintu" class="block text-sm font-medium text-gray-700">Jumlah Pintu</label>
-                                    <input type="text" name="jumlah_pintu" id="jumlah_pintu" autocomplete="address-level1" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                                </div>
-
-                                <!-- Persneling -->
-                                <div class="sm:col-span-3">
-                                    <label for="persneling" class="block text-sm font-medium text-gray-700">Persneling</label>
-                                    <input type="text" name="persneling" id="persneling" autocomplete="address-level2" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                                </div>
-
-                                <!-- Deskripsi Mobil -->
-                                <div class="sm:col-span-6">
-                                    <label for="deskripsi_mobil" class="block text-sm font-medium text-gray-700">Deskripsi Mobil</label>
-                                    <textarea id="deskripsi_mobil" name="deskripsi_mobil" rows="3" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm"></textarea>
-                                </div>
-
-<!-- Hanya Supir -->
-<div class="sm:col-span-3">
-    <div class="flex items-center">
-        <input type="radio" id="hanya_supir_ya" name="hanya_supir" value="1" class="w-4 h-4 text-indigo-600 border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        <label for="hanya_supir_ya" class="ml-2 text-sm text-gray-700">Ya</label>
-    </div>
-    <div class="flex items-center mt-2">
-        <input type="radio" id="hanya_supir_tidak" name="hanya_supir" value="0" class="w-4 h-4 text-indigo-600 border-gray-300 rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        <label for="hanya_supir_tidak" class="ml-2 text-sm text-gray-700">Tidak</label>
-    </div>
+<!-- Tombol Tambah -->
+<div class="flex justify-end mb-4">
+    <button onclick="toggleForm()" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Tambah Mobil</button>
 </div>
 
+<!-- Form Tambah Mobil (dibuat tersembunyi secara default) -->
+<div id="formTambahMobil" class="hidden">
+    <form action="dashboard_admin.php" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+          <!-- Jenis Mobil -->
+          <div class="sm:col-span-3">
+              <label for="nama_mobil" class="block text-sm font-medium text-gray-700">Nama Mobil</label>
+              <input type="text" name="nama_mobil" id="nama_mobil" autocomplete="given-name" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+          </div>
 
-                                <!-- Gambar Mobil -->
-                                <div class="sm:col-span-3">
-                                    <label for="gambar_mobil" class="block text-sm font-medium text-gray-700">Gambar Mobil</label>
-                                    <input type="file" name="gambar_mobil" id="gambar_mobil" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                                </div>
+            <!-- Harga Mobil -->
+            <div class="sm:col-span-3">
+                <label for="harga_mobil" class="block text-sm font-medium text-gray-700">Harga Mobil</label>
+                <input type="text" name="harga_mobil" id="harga_mobil" autocomplete="family-name" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            </div>
 
-                                <!-- Tombol Submit -->
-                                <div class="sm:col-span-3">
-                                    <button type="submit" name="submit" class="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Tambah</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- Akhir Form Tambah Mobil -->
+            <!-- Deskripsi P1 -->
+            <div class="sm:col-span-3">
+                <label for="deskripsi_p1" class="block text-sm font-medium text-gray-700">Deskripsi P1</label>
+                <input type="text" name="deskripsi_p1" id="deskripsi_p1" autocomplete="address-line2" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            </div>
 
-                    <!-- Daftar Mobil -->
-                    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                            <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Mobil</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga Mobil</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supir</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lama Pinjaman</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bank</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Pintu</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Persneling</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi Mobil</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hanya Supir</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar Mobil</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                        <?php while ($row = $result->fetch_assoc()) { ?>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900"><?php echo $row['jenis_mobil']; ?></div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900"><?php echo $row['harga_mobil']; ?></div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900"><?php echo $row['supir']; ?></div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900"><?php echo $row['lama_pinjaman']; ?></div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900"><?php echo $row['bank']; ?></div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900"><?php echo $row['jumlah_pintu']; ?></div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900"><?php echo $row['persneling']; ?></div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900"><?php echo $row['deskripsi_mobil']; ?></div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900"><?php echo $row['hanya_supir'] ? 'Ya' : 'Tidak'; ?></div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <img src="../uploads/ echo $row['gambar_mobil']; ?>" alt="<?php echo $row['jenis_mobil']; ?>" class="w-16 h-auto" />
-                                                </td>
-<td>
-    <a href="">edit</a>
-    <a href="">delete</a>
-</td>
-                                            </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Akhir Daftar Mobil -->
+            <!-- Deskripsi P2 -->
+            <div class="sm:col-span-3">
+                <label for="deskripsi_p2" class="block text-sm font-medium text-gray-700">Deskripsi P2</label>
+                <input type="text" name="deskripsi_p2" id="deskripsi_p2" autocomplete="address-level1" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            </div>
+
+            <!-- Deskripsi P3 -->
+            <div class="sm:col-span-3">
+                <label for="deskripsi_p3" class="block text-sm font-medium text-gray-700">Deskripsi P3</label>
+                <input type="text" name="deskripsi_p3" id="deskripsi_p3" autocomplete="address-level2" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            </div>
+
+            <!-- Deskripsi P4 -->
+            <div class="sm:col-span-6">
+                <label for="deskripsi_p4" class="block text-sm font-medium text-gray-700">Deskripsi P4</label>
+                <textarea id="deskripsi_p4" name="deskripsi_p4" rows="3" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm"></textarea>
+            </div>
+
+            <!-- Gambar Mobil 1 -->
+            <div class="sm:col-span-3">
+                <label for="gambar1" class="block text-sm font-medium text-gray-700">Gambar Mobil 1</label>
+                <input type="file" name="gambar1" id="gambar1" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            </div>
+
+            <!-- Gambar Mobil 2 -->
+            <div class="sm:col-span-3">
+                <label for="gambar2" class="block text-sm font-medium text-gray-700">Gambar Mobil 2</label>
+                <input type="file" name="gambar2" id="gambar2" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            </div>
+
+            <!-- Gambar Mobil 3 -->
+            <div class="sm:col-span-3">
+                <label for="gambar3" class="block text-sm font-medium text-gray-700">Gambar Mobil 3</label>
+                <input type="file" name="gambar3" id="gambar3" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            </div>
+
+            <!-- Gambar Mobil 4 -->
+            <div class="sm:col-span-3">
+                <label for="gambar4" class="block text-sm font-medium text-gray-700">Gambar Mobil 4</label>
+                <input type="file" name="gambar4" id="gambar4" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            </div>
+
+            <!-- Tombol Submit -->
+            <div class="sm:col-span-3">
+                <button type="submit" name="submit" class="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Tambah</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Akhir Form Tambah Mobil -->
+
+
+
+
+<!-- Daftar Mobil -->
+<div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">id_mobil</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">nama_mobil</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">harga_mobil</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">deskripsi_p1</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">deskripsi_p2</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">deskripsi_p3</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">deskripsi_p4</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">gambar1</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">gambar2</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">gambar3</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">gambar4</th>
+
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><?php echo $row['id_mobil']; ?></div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><?php echo $row['nama_mobil']; ?></div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><?php echo number_format($row['harga_mobil'], 2); ?></div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><?php echo limit_words($row['deskripsi_p1'], 5); ?></div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><?php echo limit_words($row['deskripsi_p2'], 5); ?></div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><?php echo limit_words($row['deskripsi_p3'], 5); ?></div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><?php echo limit_words($row['deskripsi_p4'], 5); ?></div>
+                            </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><?php echo $row['gambar1']; ?></div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><?php echo $row['gambar2']; ?></div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><?php echo $row['gambar3']; ?></div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><?php echo $row['gambar4']; ?></div>
+                            </td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                  <a href="edit_mobil.php?id=<?php echo $row['id_mobil']; ?>" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                  <a href="delete_mobil.php?id=<?php echo $row['id_mobil']; ?>" class="text-red-600 hover:text-red-900 ml-4">Delete</a>
+                              </td>
+
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Akhir Daftar Mobil -->
                 </div>
             </div>
         </div>
