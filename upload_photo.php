@@ -51,7 +51,7 @@ if ($uploadOk == 0) {
         if ($conn->query($sql) === TRUE) {
             echo "The file ". htmlspecialchars(basename($_FILES["photo"]["name"])). " has been uploaded.";
             // Redirect to gallery page after successful upload
-            header("Location: inigaleri.php");
+            header("Location: galeri.php");
             exit(); // Ensure that no other output is sent
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;

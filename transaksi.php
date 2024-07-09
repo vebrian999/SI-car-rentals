@@ -86,7 +86,7 @@ if(isset($_GET['id_transaksi']) && isset($_GET['id_mobil'])) {
         <div class="hidden font-medium text-base text-gray-800 md:flex items-center gap-x-6">
           <a href="./index.html" class="pb-1.5 border-b-[2px] border-transparent">Home</a>
           <a href="./daftar-paket.php" class="pb-1.5 border-b-[2px] border-transparent">Daftar Paket</a>
-          <a href="./wisata.html" class="pb-1.5 border-b-[2px] border-transparent">Wisata</a>
+          <a href="./wisata.php" class="pb-1.5 border-b-[2px] border-transparent">Wisata</a>
           <a href="./faq.html" class="pb-1.5 border-b-[2px] border-transparent">FAQ</a>
           <a href="./index.html" class="pb-1.5 border-b-[2px] border-transparent"
             ><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -117,7 +117,7 @@ if(isset($_GET['id_transaksi']) && isset($_GET['id_mobil'])) {
           <div class="flex flex-col gap-y-3.5 font-medium text-base text-gray-800 mt-5">
             <a href="./index.html">Home</a>
             <a href="./daftar-paket.php">Daftar Paket</a>
-            <a href="./wisata.html">Wisata</a>
+            <a href="./wisata.php">Wisata</a>
             <a href="./faq.html">FAQ</a>
             <a href="./index.html"
               ><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

@@ -36,7 +36,7 @@
                 </svg>
               </button>
             <div>
-              <a href="./index.html">
+              <a href="../admin/dashboard_admin.php">
                 <img src="../assets/images/logos/logoipsum-260.svg" class="object-cover w-[140px] h-auto" height="60" width="80" alt="260" />
               </a>
             </div>

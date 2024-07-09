@@ -63,9 +63,9 @@ mysqli_close($conn);
             <div class="hidden font-medium text-base text-gray-800 md:flex items-center gap-x-6">
               <a href="./index.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Home</a>
               <a href="./daftar-paket.php" class="pb-1.5 border-b-[2px] border-transparent border-orange-500 hover:border-orange-500 hover:text-orange-500">Daftar Paket</a>
-              <a href="./wisata.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Wisata</a>
+              <a href="./wisata.php" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Wisata</a>
               <a href="./galeri.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Galeri</a>
-              <a href="./profil.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Profil</a>
+              <a href="./profil.php" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Profil</a>
               <a href="./kontak.php" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">Kontak</a>
               <a href="./faq.html" class="pb-1.5 border-b-2 border-transparent hover:border-orange-500 hover:text-orange-500">FAQ</a>
               <a href="./index.html" class="pb-1.5 border-b-2 border-transparent">
@@ -97,7 +97,7 @@ mysqli_close($conn);
               <div class="flex flex-col gap-y-3.5 font-medium text-base text-gray-800 mt-5">
                 <a href="./index.html" class="text-orange-500">Home</a>
                 <a href="./daftar-paket.php">Daftar Paket</a>
-                <a href="./wisata.html">Wisata</a>
+                <a href="./wisata.php">Wisata</a>
                 <a href="./faq.html">FAQ</a>
                 <a href="./index.html"
                   ><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -242,21 +242,21 @@ mysqli_close($conn);
            <!-- Deskripsi mobil -->
            <div class="flex flex-col gap-y-5 mt-14">
                <h1 class="font-semibold text-3xl text-left">Deskripsi Mobil</h1>
-               <div class="mx-3 font-light text-base text-gray-400 text-left">
+               <div class="mx-3 font-light text-base md:text-xl text-gray-400 text-left">
                    <?php if (isset($row['deskripsi_p1'])) : ?>
-                       <p class="mb-5">Deskripsi 1 : <?php echo $row['deskripsi_p1']; ?></p>
+                       <p class="mb-5"><?php echo $row['deskripsi_p1']; ?></p>
                    <?php endif; ?>
 
                    <?php if (isset($row['deskripsi_p2'])) : ?>
-                       <p class="my-5">Deskripsi 2 : <?php echo $row['deskripsi_p2']; ?></p>
+                       <p class="my-5"><?php echo $row['deskripsi_p2']; ?></p>
                    <?php endif; ?>
 
                    <?php if (isset($row['deskripsi_p3'])) : ?>
-                       <p class="my-5">Deskripsi 3 : <?php echo $row['deskripsi_p3']; ?></p>
+                       <p class="my-5"><?php echo $row['deskripsi_p3']; ?></p>
                    <?php endif; ?>
 
                    <?php if (isset($row['deskripsi_p4'])) : ?>
-                       <p class="my-5">Deskripsi 4 : <?php echo $row['deskripsi_p4']; ?></p>
+                       <p class="my-5"><?php echo $row['deskripsi_p4']; ?></p>
                    <?php endif; ?>
                </div>
            </div>
@@ -291,7 +291,7 @@ mysqli_close($conn);
             <div class="flex flex-col gap-y-3 text-sm md:text-sm lg:text-base text-gray-700 mt-2 md:mt-4">
               <a href="./index.html" rel="noreferrer noopener" class="hover:text-orange-600">Tentang Kami</a>
               <a href="./daftar-paket.php" rel="noreferrer noopener" class="hover:text-orange-600">Daftar Paket</a>
-              <a href="./wisata.html" rel="noreferrer noopener" class="hover:text-orange-600">Wisata</a>
+              <a href="./wisata.php" rel="noreferrer noopener" class="hover:text-orange-600">Wisata</a>
               <a href="./faq.html" rel="noreferrer noopener" class="hover:text-orange-600">FAQ</a>
             </div>
           </div>
