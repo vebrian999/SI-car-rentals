@@ -13,7 +13,7 @@ $result = $conn->query($sql);
 if ($result->num_rows == 1) {
     // Jika login berhasil, set session untuk admin
     $_SESSION['admin_logged_in'] = true;
-    header("Location: dashboard_admin.php"); // Redirect ke halaman admin dashboard
+    header("Location: dashboard_product.php"); // Redirect ke halaman admin dashboard
 } else {
     // Jika login gagal, kembalikan ke halaman login
     echo "Login failed. Invalid username or password.";

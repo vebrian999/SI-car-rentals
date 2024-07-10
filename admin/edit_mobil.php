@@ -100,75 +100,83 @@ if (isset($_GET['id'])) {
                         <h2 class="text-2xl font-semibold text-gray-900">Edit Mobil</h2>
                     </div>
         <form action="update_mobil.php" method="POST" enctype="multipart/form-data" class="space-y-4">
-            <input type="hidden" name="id_mobil" value="<?php echo $row['id_mobil']; ?>">
+    <input type="hidden" name="id_mobil" value="<?php echo $row['id_mobil']; ?>">
 
-            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                <!-- Jenis Mobil -->
-                <div class="sm:col-span-3">
-                    <label for="nama_mobil" class="block text-sm font-medium text-gray-700">Nama Mobil</label>
-                    <input type="text" name="nama_mobil" id="nama_mobil" autocomplete="given-name" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" value="<?php echo $row['nama_mobil']; ?>" />
-                </div>
+    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+        <!-- Jenis Mobil -->
+        <div class="sm:col-span-3">
+            <label for="nama_mobil" class="block text-sm font-medium text-gray-700">Nama Mobil</label>
+            <input type="text" name="nama_mobil" id="nama_mobil" autocomplete="given-name" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" value="<?php echo $row['nama_mobil']; ?>" />
+        </div>
 
-                <!-- Harga Mobil -->
-                <div class="sm:col-span-3">
-                    <label for="harga_mobil" class="block text-sm font-medium text-gray-700">Harga Mobil</label>
-                    <input type="text" name="harga_mobil" id="harga_mobil" autocomplete="family-name" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" value="<?php echo $row['harga_mobil']; ?>" />
-                </div>
+        <!-- Harga Mobil -->
+        <div class="sm:col-span-3">
+            <label for="harga_mobil" class="block text-sm font-medium text-gray-700">Harga Mobil</label>
+            <input type="text" name="harga_mobil" id="harga_mobil" autocomplete="family-name" required class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" value="<?php echo $row['harga_mobil']; ?>" />
+        </div>
 
-                <!-- Deskripsi P1 -->
-                <div class="sm:col-span-3">
-                    <label for="deskripsi_p1" class="block text-sm font-medium text-gray-700">Deskripsi P1</label>
-                    <input type="text" name="deskripsi_p1" id="deskripsi_p1" autocomplete="address-line2" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" value="<?php echo $row['deskripsi_p1']; ?>" />
-                </div>
+        <!-- Deskripsi P1 -->
+        <div class="sm:col-span-3">
+            <label for="deskripsi_p1" class="block text-sm font-medium text-gray-700">Deskripsi P1</label>
+            <input type="text" name="deskripsi_p1" id="deskripsi_p1" autocomplete="address-line2" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" value="<?php echo $row['deskripsi_p1']; ?>" />
+        </div>
 
-                <!-- Deskripsi P2 -->
-                <div class="sm:col-span-3">
-                    <label for="deskripsi_p2" class="block text-sm font-medium text-gray-700">Deskripsi P2</label>
-                    <input type="text" name="deskripsi_p2" id="deskripsi_p2" autocomplete="address-level1" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" value="<?php echo $row['deskripsi_p2']; ?>" />
-                </div>
+        <!-- Deskripsi P2 -->
+        <div class="sm:col-span-3">
+            <label for="deskripsi_p2" class="block text-sm font-medium text-gray-700">Deskripsi P2</label>
+            <input type="text" name="deskripsi_p2" id="deskripsi_p2" autocomplete="address-level1" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" value="<?php echo $row['deskripsi_p2']; ?>" />
+        </div>
 
-                <!-- Deskripsi P3 -->
-                <div class="sm:col-span-3">
-                    <label for="deskripsi_p3" class="block text-sm font-medium text-gray-700">Deskripsi P3</label>
-                    <input type="text" name="deskripsi_p3" id="deskripsi_p3" autocomplete="address-level2" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" value="<?php echo $row['deskripsi_p3']; ?>" />
-                </div>
+        <!-- Deskripsi P3 -->
+        <div class="sm:col-span-3">
+            <label for="deskripsi_p3" class="block text-sm font-medium text-gray-700">Deskripsi P3</label>
+            <input type="text" name="deskripsi_p3" id="deskripsi_p3" autocomplete="address-level2" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" value="<?php echo $row['deskripsi_p3']; ?>" />
+        </div>
 
-                <!-- Deskripsi P4 -->
-                <div class="sm:col-span-6">
-                    <label for="deskripsi_p4" class="block text-sm font-medium text-gray-700">Deskripsi P4</label>
-                    <textarea id="deskripsi_p4" name="deskripsi_p4" rows="3" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm"><?php echo $row['deskripsi_p4']; ?></textarea>
-                </div>
+        <!-- Deskripsi P4 -->
+        <div class="sm:col-span-6">
+            <label for="deskripsi_p4" class="block text-sm font-medium text-gray-700">Deskripsi P4</label>
+            <textarea id="deskripsi_p4" name="deskripsi_p4" rows="3" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm"><?php echo $row['deskripsi_p4']; ?></textarea>
+        </div>
 
-                <!-- Gambar Mobil 1 -->
-                <div class="sm:col-span-3">
-                    <label for="gambar1" class="block text-sm font-medium text-gray-700">Gambar Mobil 1</label>
-                    <input type="file" name="gambar1" id="gambar1" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                </div>
+        <!-- Gambar Mobil 1 -->
+        <div class="sm:col-span-3">
+            <label for="gambar1" class="block text-sm font-medium text-gray-700">Gambar Mobil 1</label>
+            <input type="file" name="gambar1" id="gambar1" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            <input type="hidden" name="gambar1_current" value="<?php echo $row['gambar1']; ?>" />
+        </div>
 
-                <!-- Gambar Mobil 2 -->
-                <div class="sm:col-span-3">
-                    <label for="gambar2" class="block text-sm font-medium text-gray-700">Gambar Mobil 2</label>
-                    <input type="file" name="gambar2" id="gambar2" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                </div>
+        <!-- Gambar Mobil 2 -->
+        <div class="sm:col-span-3">
+            <label for="gambar2" class="block text-sm font-medium text-gray-700">Gambar Mobil 2</label>
+            <input type="file" name="gambar2" id="gambar2" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            <input type="hidden" name="gambar2_current" value="<?php echo $row['gambar2']; ?>" />
+        </div>
 
-                <!-- Gambar Mobil 3 -->
-                <div class="sm:col-span-3">
-                    <label for="gambar3" class="block text-sm font-medium text-gray-700">Gambar Mobil 3</label>
-                    <input type="file" name="gambar3" id="gambar3" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                </div>
+        <!-- Gambar Mobil 3 -->
+        <div class="sm:col-span-3">
+            <label for="gambar3" class="block text-sm font-medium text-gray-700">Gambar Mobil 3</label>
+            <input type="file" name="gambar3" id="gambar3" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            <input type="hidden" name="gambar3_current" value="<?php echo $row['gambar3']; ?>" />
+        </div>
 
-                <!-- Gambar Mobil 4 -->
-                <div class="sm:col-span-3">
-                    <label for="gambar4" class="block text-sm font-medium text-gray-700">Gambar Mobil 4</label>
-                    <input type="file" name="gambar4" id="gambar4" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
-                </div>
+        <!-- Gambar Mobil 4 -->
+        <div class="sm:col-span-3">
+            <label for="gambar4" class="block text-sm font-medium text-gray-700">Gambar Mobil 4</label>
+            <input type="file" name="gambar4" id="gambar4" class="block w-full px-3 py-2 mt-1 text-gray-900 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+            <input type="hidden" name="gambar4_current" value="<?php echo $row['gambar4']; ?>" />
+        </div>
 
-                <!-- Tombol Submit -->
-                <div class="sm:col-span-3">
-                    <button type="submit" name="submit" class="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Update</button>
-                </div>
-            </div>
-        </form>
+        <!-- Tombol Submit -->
+      <div class="mt-6 flex space-x-4">
+          <input type="submit" value="Tambah Artikel" class="px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer hover:bg-blue-600">
+          <button type="button" onclick="window.location.href='dashboard_product.php'" class="px-4 py-2 bg-red-500 text-white rounded-md cursor-pointer hover:bg-red-600">
+              Cancel
+          </button>
+      </div>
+
+    </div>
+</form>
     </div>
             </div>
         </div>
@@ -177,10 +185,10 @@ if (isset($_GET['id'])) {
          <!-- awal sidebar (aside) -->
       <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 mt-10 h-screen pt-20 transition-transform -translate-x-full bg-blue-600 border-r border-gray-200 sm:translate-x-0" aria-label="Sidebar">
         <div class="h-full px-3 pb-4 overflow-y-auto bg-blue-600">
-          <ul class="space-y-2 font-medium">
+         <ul class="space-y-2 font-medium">
             <!-- dashbord -->
             <li>
-              <a href="#" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
+              <a href="../admin/dashboard_home.php" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
                 <svg class="flex-shrink-0 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
                   <path
                     d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
@@ -191,7 +199,7 @@ if (isset($_GET['id'])) {
 
             <!-- product -->
             <li>
-              <a href="#" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
+              <a href="../admin/dashboard_product.php" class="flex items-center p-2 text-blue bg-white rounded-lg ">
                 <svg class="flex-shrink-0 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                   <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
                 </svg>
@@ -201,37 +209,18 @@ if (isset($_GET['id'])) {
 
             <!-- users -->
             <li>
-              <a href="#" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
-                <svg class="flex-shrink-0 w-5 h-5 transition duration-75" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                  <path
-                    d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
-                </svg>
-                <span class="flex-1 ms-3 whitespace-nowrap">Users</span>
+              <a href="./artikel_admin.php" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
+                <i class="fa-solid fa-newspaper text-xl"></i>
+                <span class="flex-1 ms-3 whitespace-nowrap">Articles</span>
               </a>
             </li>
 
             <!-- notifikasi -->
             <li>
-              <a href="#" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
+              <a href="../admin/pesan_admin.php" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
                 <i class="fa-solid fa-bell text-xl font-semibold"></i>
                 <span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
                 <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-600 bg-white rounded-full">3</span>
-              </a>
-            </li>
-
-            <!-- user -->
-            <li>
-              <a href="#" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
-                <i class="fa-solid fa-user text-xl"></i>
-                <span class="flex-1 ms-3 whitespace-nowrap">User</span>
-              </a>
-            </li>
-
-            <!-- Appearance -->
-            <li>
-              <a href="#" class="flex items-center p-2 text-white rounded-lg hover:bg-white hover:text-black">
-                <i class="fa-solid fa-image text-xl"></i>
-                <span class="flex-1 ms-3 whitespace-nowrap">Appearance</span>
               </a>
             </li>
           </ul>

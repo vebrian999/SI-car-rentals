@@ -10,7 +10,7 @@ if (isset($_GET['id'])) {
 
     if (mysqli_query($conn, $sql)) {
         // Redirect ke halaman dashboard atau halaman lain jika berhasil
-        header("Location: dashboard_admin.php");
+        header("Location: dashboard_product.php");
         exit();
     } else {
         // Jika query gagal dieksekusi

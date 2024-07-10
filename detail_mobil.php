@@ -126,25 +126,37 @@ mysqli_close($conn);
 <section class="py-8 mt-14 bg-white md:py-16 antialiased">
     <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
         <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
-            <div class="shrink-0 max-w-full lg:max-w-full mx-auto">
-                <!-- Gambar utama -->
-                <img id="mainImage" class="rounded-xl w-full max-w-[900px] h-[450px] object-cover" src="uploads/<?php echo $row['gambar1']; ?>" alt="gambar1" />
-                <!-- Galeri gambar -->
-                <div class="grid grid-cols-4 gap-4 mt-4">
-                    <a href="#" onclick="changeMainImage(event, 'uploads/<?php echo $row['gambar1']; ?>')">
-                        <img class="w-full h-auto object-cover max-w-[96px] max-h-[86px]" src="uploads/<?php echo $row['gambar1']; ?>" alt="gambar1" /> 
-                    </a>
-                    <a href="#" onclick="changeMainImage(event, 'uploads/<?php echo $row['gambar2']; ?>')">
-                        <img class="w-full h-auto object-cover max-w-[96px] max-h-[86px]" src="uploads/<?php echo $row['gambar2']; ?>" alt="gambar2" />
-                    </a>
-                    <a href="#" onclick="changeMainImage(event, 'uploads/<?php echo $row['gambar3']; ?>')">
-                        <img class="w-full h-auto object-cover max-w-[96px] max-h-[86px]" src="uploads/<?php echo $row['gambar3']; ?>" alt="gambar3" />
-                    </a>
-                    <a href="#" onclick="changeMainImage(event, 'uploads/<?php echo $row['gambar4']; ?>')">
-                        <img class="w-full h-auto object-cover max-w-[96px] max-h-[86px]" src="uploads/<?php echo $row['gambar4']; ?>" alt="gambar4" />
-                    </a>
-                </div>
+        <div class="shrink-0 max-w-full lg:max-w-full mx-auto">
+            <!-- Gambar utama -->
+            <img id="mainImage" class="rounded-xl w-full max-w-[900px] h-[450px] object-cover" src="uploads/<?php echo $row['gambar1']; ?>" alt="gambar1" />
+            <!-- Galeri gambar -->
+            <div class="grid grid-cols-4 gap-4 mt-4">
+                <?php if (!empty($row['gambar1'])): ?>
+                <a href="#" onclick="changeMainImage(event, 'uploads/<?php echo $row['gambar1']; ?>')">
+                    <img class="w-full h-auto object-cover max-w-[96px] max-h-[86px]" src="uploads/<?php echo $row['gambar1']; ?>" alt="gambar1" />
+                </a>
+                <?php endif; ?>
+                
+                <?php if (!empty($row['gambar2'])): ?>
+                <a href="#" onclick="changeMainImage(event, 'uploads/<?php echo $row['gambar2']; ?>')">
+                    <img class="w-full h-auto object-cover max-w-[96px] max-h-[86px]" src="uploads/<?php echo $row['gambar2']; ?>" alt="gambar2" />
+                </a>
+                <?php endif; ?>
+
+                <?php if (!empty($row['gambar3'])): ?>
+                <a href="#" onclick="changeMainImage(event, 'uploads/<?php echo $row['gambar3']; ?>')">
+                    <img class="w-full h-auto object-cover max-w-[96px] max-h-[86px]" src="uploads/<?php echo $row['gambar3']; ?>" alt="gambar3" />
+                </a>
+                <?php endif; ?>
+
+                <?php if (!empty($row['gambar4'])): ?>
+                <a href="#" onclick="changeMainImage(event, 'uploads/<?php echo $row['gambar4']; ?>')">
+                    <img class="w-full h-auto object-cover max-w-[96px] max-h-[86px]" src="uploads/<?php echo $row['gambar4']; ?>" alt="gambar4" />
+                </a>
+                <?php endif; ?>
             </div>
+        </div>
+
 
             <div class="mt-6 sm:mt-8 lg:mt-0 h-fit">
 <form action="proses_sewa.php" method="post" class="border-2 rounded-xl">
